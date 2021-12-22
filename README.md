@@ -4,6 +4,20 @@ The simple encoder and decoder for Conflux address.
 
 Check [CIP-37](https://github.com/Conflux-Chain/CIPs/pull/53/) for the protocols.
 
+## Install
+
+```sh
+$ npm install @conflux-dev/conflux-address-js
+```
+
+## Opt-in for performance
+
+To gain a address conversion performance boost, you can install [`@conflux-dev/conflux-address-rust`](https://github.com/conflux-fans/conflux-address-rust-binding) in your project. Which will be used to replace the purejs version and can gain a `10-100` performance boost.
+
+```sh
+$ npm install --save-optional @conflux-dev/conflux-address-rust
+```
+
 ## Usage
 
 ### Encoding
@@ -55,8 +69,3 @@ console.log(confluxAddr.decode('CFX:TYPE.USER:AAJG4WT2MBMBB44SP6SZD783RY0JTAD5BE
 * `isInternalContractAddress`: Check where a address is Conflux InternalContract address
 * `isValidHexAddress`: Check whether a address is valid hex address
 * `isValidCfxHexAddress`: Check where a address is valid Conflux hex address
-
-
-## Performance
-
-To gain a address conversion performance boost, you can install [`@conflux-dev/conflux-address-rust`](https://github.com/conflux-fans/conflux-address-rust-binding) in your project. Which will be used to relace the purejs version and can gain a `10-100` performance boost.
