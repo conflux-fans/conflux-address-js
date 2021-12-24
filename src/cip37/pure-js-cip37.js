@@ -70,7 +70,8 @@ function getAddressType (hexAddress) {
       }
       return CONST.TYPE_NULL
     default:
-      throw new Error('hexAddress should start with 0x0, 0x1 or 0x8')
+      return CONST.TYPE_UNKNOWN
+      // throw new Error('hexAddress should start with 0x0, 0x1 or 0x8')
   }
 }
 

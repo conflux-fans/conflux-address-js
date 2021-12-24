@@ -3,6 +3,7 @@ const TYPE_USER = 'user'
 const TYPE_CONTRACT = 'contract'
 const TYPE_BUILTIN = 'builtin'
 const TYPE_NULL = 'null'
+const TYPE_UNKNOWN = 'unknown'
 
 const PREFIX_CFX = 'cfx'
 const PREFIX_CFXTEST = 'cfxtest'
