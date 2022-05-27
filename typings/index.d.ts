@@ -18,3 +18,11 @@ export declare const simplifyCfxAddress: (address: string) => string;
 
 export declare const shortenCfxAddress: (address: string) => string;
 
+export declare const isZeroAddress: (address: string) => boolean;
+
+export declare const isInternalContractAddress: (address: string) => boolean;
+
+export declare const isValidHexAddress: (address: string) => boolean;
+
+export declare const isValidCfxHexAddress: (address: string) => boolean;
+
