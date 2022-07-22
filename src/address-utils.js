@@ -66,7 +66,8 @@ function isInternalContractAddress (address) {
     address === CONST.STAKING ||
     address === CONST.CONFLUX_CONTEXT ||
     address === CONST.POS_REGISTER ||
-    address === CONST.CROSS_SPACE_CALL
+    address === CONST.CROSS_SPACE_CALL ||
+    address === CONST.PARAMS_CONTROL
   )
 }
 
