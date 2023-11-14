@@ -5,7 +5,7 @@ const {
   convertBit
 } = require('./base32')
 const CONST = require('../const')
-const { isHexString } = require('../utils')
+const { isHexString, hexToBytes, decodeUTF8 } = require('../utils')
 
 const VERSION_BYTE = 0
 const NET_ID_LIMIT = 0xFFFFFFFF
@@ -77,10 +77,10 @@ function getAddressType (hexAddress) {
 
 function encode (hexAddress, netId, verbose = false) {
   if (isHexString(hexAddress)) {
-    hexAddress = Buffer.from(hexAddress.slice(2), 'hex')
+    hexAddress = hexToBytes((hexAddress).slice(2))
   }
-  if (!(hexAddress instanceof Buffer)) {
-    throw new Error('hexAddress should be passed as a Buffer')
+  if (!(hexAddress instanceof Uint8Array)) {
+    throw new Error('hexAddress should be passed as a Uint8Array')
   }
   if (hexAddress.length < 20) {
     throw new Error('hexAddress should be at least 20 bytes')
@@ -89,11 +89,11 @@ function encode (hexAddress, netId, verbose = false) {
   const addressType = getAddressType(hexAddress).toUpperCase()
   const netName = encodeNetId(netId).toUpperCase()
 
-  const netName5Bits = Buffer.from(netName).map(byte => byte & 0b11111)
+  const netName5Bits = decodeUTF8(netName).map(byte => byte & 0b11111)
   const payload5Bits = convertBit([VERSION_BYTE, ...hexAddress], 8, 5, true)
 
   const checksumBigInt = polyMod([...netName5Bits, 0, ...payload5Bits, 0, 0, 0, 0, 0, 0, 0, 0])
-  const checksumBytes = Buffer.from(checksumBigInt.toString(16).padStart(10, '0'), 'hex')
+  const checksumBytes = hexToBytes(checksumBigInt.toString(16).padStart(10, '0'), 'hex')
   const checksum5Bits = convertBit(checksumBytes, 8, 5, true)
 
   const payload = payload5Bits.map(byte => ALPHABET[byte]).join('')
@@ -114,7 +114,7 @@ function decode (address) {
 
   const [, netName, shouldHaveType, payload, checksum] = address.toUpperCase().match(/^([^:]+):(.+:)?(.{34})(.{8})$/)
 
-  const prefix5Bits = Buffer.from(netName).map(byte => byte & 0b11111)
+  const prefix5Bits = decodeUTF8(netName).map(byte => byte & 0b11111)
   const payload5Bits = []
   for (const char of payload) {
     payload5Bits.push(ALPHABET_MAP[char])
@@ -129,7 +129,7 @@ function decode (address) {
     throw new Error('Can not recognize version byte')
   }
 
-  const hexAddress = Buffer.from(addressBytes)
+  const hexAddress = new Uint8Array(addressBytes)
   const netId = decodeNetId(netName.toLowerCase())
   const type = getAddressType(hexAddress)
 

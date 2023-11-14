@@ -1,4 +1,6 @@
-const conflux_addr = require('../lib/index.js')
+// const conflux_addr = require('../lib/index.js')
+const conflux_addr = require('../src/index.js');
+
 
 function verify (hexAddress, netId, base32Address) {
   let verbose = false
@@ -6,7 +8,8 @@ function verify (hexAddress, netId, base32Address) {
     verbose = true
   }
 
-  const hexBuffer = Buffer.from(hexAddress, 'hex')
+  let hexBuffer = Buffer.from(hexAddress, 'hex')
+  hexBuffer = new Uint8Array(hexBuffer);
   expect(conflux_addr.encode(hexBuffer, netId, verbose)).toBe(base32Address)
   expect(conflux_addr.decode(base32Address).hexAddress).toStrictEqual(hexBuffer)
   expect(conflux_addr.decode(base32Address).netId).toBe(netId)
