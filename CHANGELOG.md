@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v1.4.0
+## v2.0.1
 
 1. Change buffer to Uint8Array in `decode` to support browser environment. This is a break change!
 
