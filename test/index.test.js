@@ -1,4 +1,6 @@
-const conflux_addr = require('../lib/index.js')
+// const conflux_addr = require('../lib/index.js')
+const conflux_addr = require('../src/index.js');
+
 
 function verify (hexAddress, netId, base32Address) {
   let verbose = false
@@ -6,7 +8,8 @@ function verify (hexAddress, netId, base32Address) {
     verbose = true
   }
 
-  const hexBuffer = Buffer.from(hexAddress, 'hex')
+  let hexBuffer = Buffer.from(hexAddress, 'hex')
+  hexBuffer = new Uint8Array(hexBuffer);
   expect(conflux_addr.encode(hexBuffer, netId, verbose)).toBe(base32Address)
   expect(conflux_addr.decode(base32Address).hexAddress).toStrictEqual(hexBuffer)
   expect(conflux_addr.decode(base32Address).netId).toBe(netId)
@@ -32,4 +35,19 @@ test('test examples in different networks', () => {
   verify('106d49f8505410eb4e671d51f7d96d2c87807b09', 1029, 'cfx:aajg4wt2mbmbb44sp6szd783ry0jtad5bea80xdy7p')
   verify('806d49f8505410eb4e671d51f7d96d2c87807b09', 1, 'cfxtest:acag4wt2mbmbb44sp6szd783ry0jtad5be3xj925gz')
   verify('006d49f8505410eb4e671d51f7d96d2c87807b09', 10086, 'net10086:aaag4wt2mbmbb44sp6szd783ry0jtad5benr1ap5gp')
+})
+
+test('rejects characters outside CIP-37 alphabet', () => {
+  const invalid = [
+    'cfx:iarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg',
+    'cfx:larc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg',
+    'cfx:oarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg',
+    'cfx:qarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg',
+    'cfx:аarc9abycue0hhzgyrr53m6cxedgccrmmyybjgh4xg', // Cyrillic a
+  ]
+
+  for (const addr of invalid) {
+    expect(() => conflux_addr.decode(addr)).toThrow()
+    expect(conflux_addr.isValidCfxAddress(addr)).toBe(false)
+  }
 })

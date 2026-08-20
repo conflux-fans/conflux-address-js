@@ -1,10 +1,10 @@
 export interface AddressInfo {
-  hexAddress: Buffer;
+  hexAddress: Uint8Array;
   netId: number;
   type: string;
 }
 
-export declare const encode: (hexAddress: string | Buffer, netId: number, verbose?: boolean) => string;
+export declare const encode: (hexAddress: string | Uint8Array, netId: number, verbose?: boolean) => string;
 
 export declare const decode: (address: string) => AddressInfo;
 
