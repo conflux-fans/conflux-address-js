@@ -104,6 +104,14 @@ function encode (hexAddress, netId, verbose = false) {
     : `${netName}:${payload}${checksum}`.toLowerCase()
 }
 
+function alphabetValue (char) {
+  const value = ALPHABET_MAP[char]
+  if (value === undefined) {
+    throw new Error(`Invalid base32 character: ${char}`)
+  }
+  return value
+}
+
 function decode (address) {
   // don't allow mixed case
   const lowered = address.toLowerCase()
@@ -117,11 +125,11 @@ function decode (address) {
   const prefix5Bits = decodeUTF8(netName).map(byte => byte & 0b11111)
   const payload5Bits = []
   for (const char of payload) {
-    payload5Bits.push(ALPHABET_MAP[char])
+    payload5Bits.push(alphabetValue(char))
   }
   const checksum5Bits = []
   for (const char of checksum) {
-    checksum5Bits.push(ALPHABET_MAP[char])
+    checksum5Bits.push(alphabetValue(char))
   }
 
   const [version, ...addressBytes] = convertBit(payload5Bits, 5, 8)

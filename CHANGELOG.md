@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.1.0
+
+1. Fix issue: accepts base32 addresses containing characters CIP-37 removes from the alphabet
+
 ## v2.0.1
 
 1. Change buffer to Uint8Array in `decode` to support browser environment. This is a break change!
